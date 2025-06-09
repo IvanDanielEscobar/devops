@@ -1,0 +1,10 @@
+# Logs
+/var/log/nginx/*
+
+# Temporary files
+*.tmp
+*.bak
+
+# SSL Private Keys (si las tuvieras en /etc/nginx)
+*.key
+*.pem
