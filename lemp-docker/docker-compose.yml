@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: lemp_nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./src:/var/www/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf # Ruta relativa
+    depends_on:
+      - php
+    networks:
+      - lempnet
+
+  php:
+    build:
+      context: .
+      dockerfile: php.Dockerfile
+    container_name: lemp_php
+    volumes:
+      - ./src:/var/www/html
+      - ./php-conf/php.ini:/usr/local/etc/php/php.ini
+    networks:
+      - lempnet
+
+  mysql:
+    image: mysql:5.7
+    container_name: lemp_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: appdb
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: apppass
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+    networks:
+      - lempnet
+
+networks:
+  lempnet:
+    driver: bridge
