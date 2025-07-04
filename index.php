@@ -1,35 +1,39 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Lista de Productos</title>
-</head>
-<body>
-<h1>Lista de Productos</h1>
 <?php
-$servername = "localhost";
-$username = "iescobar"; // Cambiar
-$password = "123456789"; // Cambiar
-$dbname = "mi_sitio_web";
+$host = 'localhost';
+$db   = 'sitios_alumnos';
+$user = 'alumnos';
+$pass = 'alumnopass';
+$charset = 'utf8mb4';
 
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-die("Conexión fallida: " . $conn->connect_error);
-}
+$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+$options = [
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    PDO::ATTR_EMULATE_PREPARES   => false,
+];
 
-$sql = "SELECT nombre, precio FROM productos";
-$result = $conn->query($sql);
+try {
+    $pdo = new PDO($dsn, $user, $pass, $options);
 
-if ($result->num_rows > 0) {
-echo "<table>";
-echo "<tr><th>Nombre</th><th>Precio</th></tr>";
-while($row = $result->fetch_assoc()) {
-echo "<tr><td>" . $row["nombre"]. "</td><td>$" . $row["precio"]. "</td></tr>";
+    $stmt = $pdo->query("SELECT * FROM alumnos ORDER BY comision, apellido");
+
+    echo "<h1>Listado de Alumnos</h1>";
+    echo "<table border='1' cellpadding='6'>";
+    echo "<thead><tr><th>ID</th><th>Comisión</th><th>Apellido</th><th>Nombre</th><th>Email</th></tr></thead>";
+    echo "<tbody>";
+    foreach ($stmt as $row) {
+        echo "<tr>";
+        echo "<td>{$row['id']}</td>";
+        echo "<td>{$row['comision']}</td>";
+        echo "<td>{$row['apellido']}</td>";
+        echo "<td>{$row['nombre']}</td>";
+        echo "<td><a href='mailto:{$row['email']}'>{$row['email']}</a></td>";
+        echo "</tr>";
+    }
+    echo "</tbody></table>";
+
+} catch (PDOException $e) {
+    echo "<h2>Error de conexión a la base de datos:</h2>";
+    echo "<pre>" . $e->getMessage() . "</pre>";
 }
-echo "</table>";
-} else {
-echo "No hay productos disponibles.";
-}
-$conn->close();
 ?>
-</body>
-</html>
