@@ -1,0 +1,19 @@
+{
+    "name": "ivan/part1-ci",
+    "description": "actividad practica final parte 1 ci",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Ivan\\Part1Ci\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "IvanDanielEscobar",
+            "email": "i.escobar@itecriocuarto.org.ar"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^10.5"
+    }
+}

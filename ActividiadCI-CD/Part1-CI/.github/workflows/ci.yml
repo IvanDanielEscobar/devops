@@ -1,0 +1,26 @@
+name: PHP CI
+
+on:
+  push:
+    branches: ["practica-ci-cd"]
+  pull_request:
+    branches: ["practica-ci-cd"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar repo
+        uses: actions/checkout@v3
+
+      - name: Instalar PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+
+      - name: Instalar dependencias
+        run: composer install
+
+      - name: Ejecutar tests
+        run: vendor/bin/phpunit --testdox test/
